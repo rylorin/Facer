@@ -1,5 +1,4 @@
 # Specifies intentionally untracked files to ignore when using Git
-# http://git-scm.com/docs/gitignore
 
 *~
 *.sw[mnpcod]
@@ -29,3 +28,6 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+
+node_modules
+/App/www
