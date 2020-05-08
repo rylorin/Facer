@@ -6,7 +6,9 @@
 ## With ideas from
 
 (https://devdactic.com/ionic-4-image-upload-storage/)
+
 (https://capacitor.ionicframework.com/docs/guides/ionic-framework-app)
+
 (https://roblouie.com/article/574/learn-ionic-cordova-file-upload/)
 
 ## How to build/use
