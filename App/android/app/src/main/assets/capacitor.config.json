@@ -1,8 +1,0 @@
-{
-  "appId": "com.rylorin.camapp",
-  "appName": "CamApp",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "www",
-  "cordova": {}
-}

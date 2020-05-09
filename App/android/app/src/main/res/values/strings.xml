@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">CamApp</string>
-    <string name="title_activity_main">CamApp</string>
-    <string name="package_name">com.rylorin.camapp</string>
-    <string name="custom_url_scheme">com.rylorin.camapp</string>
-</resources>
