@@ -23,12 +23,12 @@ checkout project
 ## First build of mobile application
 
     $ cd App
+    $ npm install
     $ npx npm-force-resolutions
     $ npm install
     $ ionic build
     $ npx cap add ios
     $ npx cap add android
-    $ npx cap copy
 
 ## Rebuild mobile application after code modification
 
