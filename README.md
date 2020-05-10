@@ -35,3 +35,8 @@ checkout project
     $ ionic build
     $ npx cap sync
     $ npx cap open android
+
+## Server part
+
+	$ npm install --production
+	$ npm start
