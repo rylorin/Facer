@@ -17,7 +17,7 @@ install ionic
   
 checkout project
 
-    $ git checkout https://github.com/rylorin/facer
+    $ git checkout https://github.com/rylorin/Facer.git
     $ cd facer
 
 ## First build of mobile application
