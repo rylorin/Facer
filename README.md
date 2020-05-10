@@ -13,24 +13,25 @@ https://roblouie.com/article/574/learn-ionic-cordova-file-upload/
 
 install ionic
 
-    $ npm i -g @ionic/cli  
+    $ npm i -g @ionic/cli
   
 checkout project
 
-    $ git checkout https://github.com/rylorin/facer  
-    $ cd facer/App  
+    $ git checkout https://github.com/rylorin/facer
+    $ cd facer
 
-## First build
+## First build of mobile application
 
-    $ npx npm-force-resolutions  
-    $ npm install  
-    $ ionic build  
-    $ npx cap add ios  
-    $ npx cap add android  
-    $ npx cap copy  
+    $ cd App
+    $ npm install
+    $ npx npm-force-resolutions
+    $ npm install
+    $ ionic build
+    $ npx cap add ios
+    $ npx cap add android
 
-## Rebuild after code modification
+## Rebuild mobile application after code modification
 
-    $ ionic build  
-    $ npx cap sync  
-    $ npx cap open android  
+    $ ionic build
+    $ npx cap sync
+    $ npx cap open android
