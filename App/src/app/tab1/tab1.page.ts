@@ -15,26 +15,38 @@ export class Tab1Page {
   photo: SafeResourceUrl;
 
   constructor(
-		  private sanitizer: DomSanitizer,
-		  private httpClient: HttpClient) {
-	  this.photo = '/assets/images/000000-0.1.png';
+      private sanitizer: DomSanitizer,
+      private httpClient: HttpClient) {
+      this.photo = '/assets/images/000000-0.1.png';
   }
 
 //  uploadImages(contents): Promise<any[]> {
- uploadImages(contents) {
-	console.log('uploadImages/contents: ' + contents);
-	const formData = new FormData();
-	formData.append('photos', contents, 'filename');
-    this.httpClient.post(`${this.baseUrl}/image-upload`, formData);
-//	return this.httpClient.post<any[]>(`${this.baseUrl}/upload-photos`, formData).toPromise();
+  async uploadImages(contents) {
+    console.log('uploadImages/contents: ' + contents.webPath);
+    const formData = new FormData();
+
+    const response = fetch(contents.webPath);
+    const blob = (await response).blob();
+
+    console.log(typeof blob);
+    console.log(blob);
+
+    formData.append('photos', await blob, 'filename');
+
+    
+    
+    this.httpClient.post(`${this.baseUrl}/image-upload`, formData).subscribe((value) => console.log(value));
+    //this.httpClient.get('http://transport.opendata.ch/v1/connections?from=Lausanne&to=Gen%C3%A8ve').subscribe((value) => console.log(value));
+// 	return this.httpClient.post<any[]>(`${this.baseUrl}/upload-photos`, formData).toPromise();
   }
 
   async sendImage(image) {
-	console.log('sendImage/image.webPath: ' + image.webPath);
-	this.uploadImages(image.webPath);
-	fetch(image.webPath).then(res => console.log('sendImage/res:' + res));
-	fetch(image.webPath).then(res => console.log('sendImage/res.blob:' + res.blob()));
-	fetch(image.webPath).then(res => this.uploadImages(res.blob()));
+    console.log('sendImage/image.webPath: ' + image.webPath);
+    console.log('Image :  ' + image);
+    this.uploadImages(image);
+    //fetch(image.webPath).then(res => console.log('sendImage/res:' + res));
+    //fetch(image.webPath).then(res => console.log('sendImage/res.blob:' + res.blob()));
+    //fetch(image.webPath).then(res => this.uploadImages(res.blob()));
   }
 
   async takePhoto() {
@@ -44,6 +56,7 @@ export class Tab1Page {
       resultType: CameraResultType.Uri,
       source: CameraSource.Prompt
     });
+
     console.log('takePhoto/image.dataUrl: ' + image.dataUrl); // data:image/jpeg;base64,...
     console.log('takePhoto/image.path: ' + image.path); //  file:///data/user/0/com.rylorin.camapp/cache/JPEG_...
     console.log('takePhoto/image.webPath: ' + image.webPath); //  http://localhost/_capacitor_file_/data/user/0/com.rylorin.camapp/cache/JPEG_...
