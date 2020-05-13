@@ -37,10 +37,10 @@ export class Tab1Page {
 
 		console.log('uploadImages/this.httpClient.post ' + `${this.baseUrl}/list-images`);
 		this.httpClient.post(`${this.baseUrl}/upload-photos`, formData).subscribe((value) => {
-			console.log('uploadImages/post result: ' + value[0].newName);
+			console.log('uploadImages/post result: ' + value);
 			const extras: NavigationExtras = {
 				queryParams: {
-					special: value[0].newName
+					special: value
 				}
 			};
 			this.router.navigate(['/tabs/tab2'], extras);
