@@ -8,9 +8,9 @@ import sys
 CLE = '16edd30697fa4fd380600f112854bef7'
 SERVEUR = 'https://tester-facer-recognition.cognitiveservices.azure.com'
 
-GROUPE = 'alice-bob-carol-dave-antoine'
-PERSONNES = [ 'alice', 'bob', 'carol', 'dave', 'antoine' ]
-ATTENTE = 26
+GROUPE = 'alice-bob-carol-dave-antoine-macron'
+
+
 
 reponse = requests.post(
 	url = 'https://tester-facer-recognition.cognitiveservices.azure.com/face/v1.0/detect',
@@ -23,7 +23,7 @@ reponse = requests.post(
     data = open(sys.argv[1], 'rb').read()
 )
 visages = reponse.json()
-print(len(visages))
+#print(len(visages))
 if (len(visages) != 1):
 	print('Pas de visage')
 else:
@@ -41,11 +41,16 @@ else:
 	    }
 	)
 
-	#print(reponse.json()[0]['candidates'][0]['personId'])
+	if len(reponse.json()[0]['candidates'])==1:
+
+		print(reponse.json()[0]['candidates'][0]['personId'])
+	else:
+		print("no results")
 
 
 
-	file = open("clients.json","r")
+
+	"""file = open("clients.json","r")
 	txt = file.read()
 	json = json.loads(txt)
 	for person in json['people']:
@@ -53,7 +58,7 @@ else:
 			print(person['name'])
 	#print(json['people'])
 
-"""noms = dict.fromkeys(visages_id, '?')
+noms = dict.fromkeys(visages_id, '?')
 for identite in reponse.json():        
     if len(identite['candidates']) > 0:
         noms[identite['faceId']] = "%s %d%%" % (ids[identite['candidates'][0]['personId']], identite['candidates'][0]['confidence']*100)"""

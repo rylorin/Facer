@@ -10,6 +10,7 @@ const http = require('request');
 
 
 const express = require('express');
+const server_html = express();
 const fs = require('fs');
 const multer  = require('multer');
 const path = require('path');
@@ -53,7 +54,10 @@ app.post('/upload-photos', upload.array('photos'), function (req, res) {
     console.log('Calling python script');
     pythonProcess.stdout.on('data', (data) => {
       console.log(data.toString('utf8'));
-      res.send([data.toString('utf8')]);
+      let path = data.toString('utf8');
+      console.log('Retour Python : '+path);
+      res.send([path])
+      //res.send([data.toString('utf8')]);
       //res.send(uploadInfo);
       
     });
@@ -73,7 +77,8 @@ app.get('/test-reco',(req, res) => {
     console.log('hum');
     pythonProcess.stdout.on('data', (data) => {
       console.log(data.toString('utf8'));
-      res.send(data.toString('utf8'));
+;
+      //res.send(data.toString('utf8'));
       
     });
   //console.log(value);
@@ -107,7 +112,11 @@ app.get('/list-images', (req, res) => {
   });
 });
 
+app.get('/files', function(request,response){
+  console.log(request.query['file']);
 
+  response.sendfile('./clients-files/'+request.query['file']+'.html');
+});
 
 
 
