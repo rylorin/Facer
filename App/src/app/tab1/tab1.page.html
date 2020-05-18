@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Scan 7
+      Scanner
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -17,8 +17,10 @@
 </ion-content>
 -->
 <ion-content>
-  <img [src]="photo" >
+  <div class="img_container"><h1>Photo prise :</h1><small>Prenez en photo l'un de vos candidats partenaires</small><img class="img" [src]="photo" ></div>
+  
   {{error}}
+  <div id="wrap" ><div id="loading" ></div></div>
   <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button (click)="takePhoto()">
       <ion-icon name="camera"></ion-icon>

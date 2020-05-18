@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Tab1Page } from './tab1.page';
-//import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
+import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -12,7 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
     IonicModule,
     CommonModule,
     FormsModule,
-    //ExploreContainerComponentModule,
+    ExploreContainerComponentModule,
     RouterModule.forChild([{ path: '', component: Tab1Page }]),
     HttpClientModule
   ],
