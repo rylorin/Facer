@@ -14,12 +14,16 @@
     </ion-toolbar>
   </ion-header>
 
-
+<div id="elem"></div>
 
 <div *ngIf="display">
-<iframe width="100%" height="100%" [src]="return"></iframe>
+
 </div>
-<div *ngIf="!display">Page pour tracks</div>
+<div *ngIf="!display"><h1>Vos candidats</h1><small>Sur cette page, retrouvez le
+  programme de vos candidats.
+  Pour se faire, veuillez cliquer sur l'onglet Scanner et ensuite prendre en photo le candidats.
+  <button (click)="Scanner()">Scanner</button>
+</small></div>
 
   
 </ion-content>

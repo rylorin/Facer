@@ -1,40 +1,68 @@
-import { DomSanitizer } from '@angular/platform-browser';
+import { DataService } from './../services/data.service';
+
+
 import { Component, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
+
 import { ActivatedRoute, Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
+import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
+
+
+
+
 
 @Component({
-	selector: 'app-tab2',
-	templateUrl: 'tab2.page.html',
-	styleUrls: ['tab2.page.scss'],
-	encapsulation: ViewEncapsulation.None
+  selector: 'app-tab2',
+  templateUrl: 'tab2.page.html',
+  styleUrls: ['tab2.page.scss'],
+  encapsulation: ViewEncapsulation.None
 })
+export class Tab2Page implements OnInit{
 
-export class Tab2Page implements OnInit, AfterViewInit {
-	//  private readonly baseUrl = 'http://localhost:3000';
-	private readonly baseUrl = 'http://vps183484.vps.ovh.ca:3000';
-	// tslint:disable-next-line: ban-types
-	return: any;
-	display = 0;
 
-	// tslint:disable-next-line: max-line-length
-	constructor(/*private httpClient: HttpClient*/ private route: ActivatedRoute, private router: Router, private domSanitizer: DomSanitizer) {
-		this.route.queryParams.subscribe(params => {
-			if (params && params.special) {
-				console.log('Special Param : ' + params.special);
-				this.return = this.domSanitizer.bypassSecurityTrustResourceUrl(`${this.baseUrl}/files?file=` + params.special);
-				console.log(this.return);
-				this.display = 1;
 
-			}
-		});
-	}
+  private readonly baseUrl = 'http://localhost:3000';
+  // tslint:disable-next-line: ban-types
+  return: any = '';
+  page = '';
+  display = 0;
 
-	ngOnInit() {
 
-	}
-	
-	ngAfterViewInit() {
-		// this.httpClient.get(`${this.baseUrl}/list-images`).subscribe((value) => this.return = value);
-	}
+
+  // tslint:disable-next-line: max-line-length
+  constructor(private route: ActivatedRoute, private router: Router, private service: DataService, private pageTrans: NativePageTransitions) {
+  }
+
+  ionViewWillLeave() {
+    document.getElementById('elem').innerHTML = '';
+  }
+
+  ionViewWillEnter() {
+    this.page = this.service.getData('page');
+    if (this.page) {
+      this.display = 1;
+      console.log(document.getElementById('elem'));
+      document.getElementById('elem').innerHTML = this.page;
+    }
+  }
+
+  ngOnInit() {
+
+  }
+
+  Scanner() {
+    const options: NativeTransitionOptions = {
+      direction: 'right',
+      duration: 400,
+      slowdownfactor: -1,
+      iosdelay: 50
+    };
+    this.pageTrans.slide(options);
+    this.router.navigate(['/tabs/tab1']);
+  }
+
+
+
+
 
 }
