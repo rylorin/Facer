@@ -1,15 +1,8 @@
 import { DataService } from './../services/data.service';
-
-
 import { Component, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
-
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
-
-
-
-
 
 @Component({
   selector: 'app-tab2',
@@ -17,17 +10,12 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
   styleUrls: ['tab2.page.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class Tab2Page implements OnInit{
 
-
-
-  private readonly baseUrl = 'http://localhost:3000';
+export class Tab2Page implements OnInit {
   // tslint:disable-next-line: ban-types
   return: any = '';
   page = '';
   display = 0;
-
-
 
   // tslint:disable-next-line: max-line-length
   constructor(private route: ActivatedRoute, private router: Router, private service: DataService, private pageTrans: NativePageTransitions) {
@@ -47,7 +35,6 @@ export class Tab2Page implements OnInit{
   }
 
   ngOnInit() {
-
   }
 
   Scanner() {
@@ -60,9 +47,5 @@ export class Tab2Page implements OnInit{
     this.pageTrans.slide(options);
     this.router.navigate(['/tabs/tab1']);
   }
-
-
-
-
 
 }

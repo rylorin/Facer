@@ -7,7 +7,7 @@ import sys
 
 CLE = '16edd30697fa4fd380600f112854bef7'
 SERVEUR = 'https://tester-facer-recognition.cognitiveservices.azure.com'
-GROUPE = 'alice-bob-carol-dave-antoine-macron'
+GROUPE = 'ronan-antoine-lora-alain-macron'
 
 reponse = requests.post(
 	url = 'https://tester-facer-recognition.cognitiveservices.azure.com/face/v1.0/detect',

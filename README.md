@@ -8,13 +8,14 @@
 https://devdactic.com/ionic-4-image-upload-storage/  
 https://capacitor.ionicframework.com/docs/guides/ionic-framework-app  
 https://roblouie.com/article/574/learn-ionic-cordova-file-upload/
+https://www.joshmorony.com/using-the-capacitor-filesystem-api-to-store-photos/
 
 ## Requirements
 
 install ionic
 
     $ npm i -g @ionic/cli
-  
+
 checkout project
 
     $ git checkout https://github.com/rylorin/Facer.git
