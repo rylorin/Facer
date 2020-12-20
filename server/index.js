@@ -1,10 +1,15 @@
-const CLE = '16edd30697fa4fd380600f112854bef7';
-const SERVEUR = 'https://tester-facer-recognition.cognitiveservices.azure.com';
+const CLE = '741c46b9ea714b1282bc72cd1008c2c2'
+const SERVEUR = 'https://facer-face.cognitiveservices.azure.com'
+const GROUPE = 'ronan-antoine-lora-alain-macron'
+const people = {
+	antoine: "6af1db98-bb55-4a83-b955-43372ae87478",
+	ronan: "f8858bb5-802d-404b-9a16-66ffe3fab013",
+	lora: "80bee6bf-3ece-427d-ae7f-a9b73d5498db",
+	alain: "a345f05d-9181-410f-afc6-941fe4cbe92d",
+	macron: "5a3c1d44-2ba1-40f8-ab98-e16330268682"
+}
 
-const GROUPE = 'alice-bob-carol-dave-antoine';
-const PERSONNES = ['alice', 'bob', 'carol', 'dave', 'antoine'];
-const ATTENTE = 26;
-
+const request = require('request');
 const express = require('express');
 const fs = require('fs');
 const multer = require('multer');
@@ -55,15 +60,62 @@ app.post('/upload-photos', upload.array('photos'), function(req, res) {
 });
 
 app.get('/test-reco', (req, res) => {
-	const spawn = require("child_process").spawn;
-	const pythonProcess = spawn('python', ["python.py", 'uploaded-images/49ad39fe-2ba4-43f5-92c1-9f289fe12a7c1589382152875']);
-	console.log('hum');
-	pythonProcess.stdout.on('data', (data) => {
-		console.log(data.toString('utf8'));
-		;
-		//res.send(data.toString('utf8'));
-	});
+
+
+	const buffer = fs.readFileSync('./uploaded-images/49ad39fe-2ba4-43f5-92c1-9f289fe12a7c1589382152875.jpg', null, 'r')
+
+	const options ={
+		url: SERVEUR+'/face/v1.0/detect?recognitionModel=recognition_02',
+		method: 'POST',
+		headers: {
+			'Ocp-Apim-Subscription-Key': CLE,
+	        'Content-Type': 'application/octet-stream',
+    	    'Accept': 'application/json'
+		},
+		body: buffer
+	}
+
+	request(options, (err, response) => {
+		if (err) { return }
+		const visage_id = JSON.parse(response.body)[0].faceId
+		console.log(visage_id)
+		const optionsIden = {
+			url: SERVEUR+'/face/v1.0/identify',
+			method: 'POST',
+			headers: {
+				'Ocp-Apim-Subscription-Key': CLE
+			},
+			body: JSON.stringify({
+				personGroupId: GROUPE,
+				faceIds: [visage_id],
+				maxNumOfCandidatesReturned: 1,
+				confidenceThreshold: 0.5			
+			})
+		}	
+
+		request(optionsIden, (_err, finalResponse) => {
+			const finded = JSON.parse(finalResponse.body)[0].candidates[0].personId
+			keys = Object.keys(people)
+			console.log(keys.find((key) => people[key] == finded))
+		})
+
+	})
+
 });
+
+
+
+// reponse = requests.post(
+//     url='https://facer-face.cognitiveservices.azure.com/face/v1.0/detect',
+//     headers={
+//         'Ocp-Apim-Subscription-Key': CLE,
+//         'Content-Type': 'application/octet-stream',
+//         'Accept': 'application/json'
+//     },
+//     params={'recognitionModel': 'recognition_02'},
+//     data=open(sys.argv[1], 'rb').read()
+// )
+// visages = reponse.json()
 
 function searcherPython() {
 	let value = "d";
