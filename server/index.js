@@ -1,12 +1,12 @@
 const CLE = '741c46b9ea714b1282bc72cd1008c2c2'
 const SERVEUR = 'https://facer-face.cognitiveservices.azure.com'
 const GROUPE = 'ronan-antoine-lora-alain-macron'
-const people = {
-	antoine: "6af1db98-bb55-4a83-b955-43372ae87478",
-	ronan: "f8858bb5-802d-404b-9a16-66ffe3fab013",
-	lora: "80bee6bf-3ece-427d-ae7f-a9b73d5498db",
-	alain: "a345f05d-9181-410f-afc6-941fe4cbe92d",
-	macron: "5a3c1d44-2ba1-40f8-ab98-e16330268682"
+const result_mapping = {	// Mapping between Azure faceId and html files
+	'f8858bb5-802d-404b-9a16-66ffe3fab013': 'df94c3d1-3dc7-4915-b8ec-e3fb52f85bae.html',	// Ronan
+	'6af1db98-bb55-4a83-b955-43372ae87478': 'e86f7002-7be2-4913-8385-1c4e159b3935.html',	// Antoine
+	'80bee6bf-3ece-427d-ae7f-a9b73d5498db': 'f4fe156e-19d3-4903-a33c-5b38966f9b8d.html',	// Lora
+	'a345f05d-9181-410f-afc6-941fe4cbe92d': 'f8db36de-089b-47e4-b6bd-8f8bf3e43524.html',	// Alain
+	'5a3c1d44-2ba1-40f8-ab98-e16330268682': '2509d676-e49f-4c9e-b799-f815d1bf70a2.html',	// Emmanuel
 }
 
 const request = require('request');
@@ -33,39 +33,23 @@ app.use(function(req, res, next) {
 app.use('/images', express.static('uploaded-images'));
 
 app.post('/upload-photos', upload.array('photos'), function(req, res) {
-	console.log('/upload-photos');
+	console.log('/upload-photos called');
 	const uploadInfo = req.files.map(file => {
 		return {
 			sourceName: file.originalname,
 			newName: file.filename
 		};
 	});
-	console.log(uploadInfo[0].newName);
-
-	let path = 'uploaded-images/' + uploadInfo[0].newName;
-	console.log('Path : ' + path);
-
-	const spawn = require("child_process").spawn;
-	const pythonProcess = spawn('python3', ["python.py", path]);
-	console.log('Calling python script');
-	pythonProcess.stdout.on('data', (data) => {
-		console.log(data.toString('utf8'));
-		let path = data.toString('utf8');
-		console.log('Retour Python : ' + path);
-		res.send([path])
-		//res.send([data.toString('utf8')]);
-		//res.send(uploadInfo);
-	});
-	//res.send(uploadInfo);
+	let path = './uploaded-images/' + uploadInfo[0].newName;
+	identify(req, res, path);
 });
 
-app.get('/test-reco', (req, res) => {
+function identify(req, res, path) {
+	console.log('identify(' + path + ') called');
+	const buffer = fs.readFileSync(path, null, 'r')
 
-
-	const buffer = fs.readFileSync('./uploaded-images/49ad39fe-2ba4-43f5-92c1-9f289fe12a7c1589382152875.jpg', null, 'r')
-
-	const options ={
-		url: SERVEUR+'/face/v1.0/detect?recognitionModel=recognition_02',
+	const options = {
+		url: SERVEUR + '/face/v1.0/detect?recognitionModel=recognition_02',
 		method: 'POST',
 		headers: {
 			'Ocp-Apim-Subscription-Key': CLE,
@@ -74,13 +58,18 @@ app.get('/test-reco', (req, res) => {
 		},
 		body: buffer
 	}
-
+	// step 1: detect
 	request(options, (err, response) => {
-		if (err) { return }
-		const visage_id = JSON.parse(response.body)[0].faceId
-		console.log(visage_id)
+		if (err) {
+			console.error('err: ' + err);
+			res.send('error1');
+			return;
+		}
+		console.log('detect: ' + response.body);
+		const visage_id = JSON.parse(response.body)[0].faceId;
+		console.log('visage_id: ' + visage_id);
 		const optionsIden = {
-			url: SERVEUR+'/face/v1.0/identify',
+			url: SERVEUR + '/face/v1.0/identify',
 			method: 'POST',
 			headers: {
 				'Ocp-Apim-Subscription-Key': CLE
@@ -89,55 +78,51 @@ app.get('/test-reco', (req, res) => {
 				personGroupId: GROUPE,
 				faceIds: [visage_id],
 				maxNumOfCandidatesReturned: 1,
-				confidenceThreshold: 0.5			
+				confidenceThreshold: 0.5
 			})
-		}	
-
-		request(optionsIden, (_err, finalResponse) => {
-			const finded = JSON.parse(finalResponse.body)[0].candidates[0].personId
-			keys = Object.keys(people)
-			console.log(keys.find((key) => people[key] == finded))
+		}
+		// step 2: identify
+		request(optionsIden, (err, finalResponse) => {
+			if (err) {
+				console.error('err: ' + err);
+				res.send('error2');
+				return;
+			}
+			console.log('identify: ' + finalResponse.body);
+			const finded = JSON.parse(finalResponse.body)[0].candidates[0].personId;
+			console.log('finded: ' + finded);
+			let result = result_mapping[finded];
+			console.log('returning: ' + result.toString('utf8'));
+			res.send([result.toString('utf8')]);
 		})
-
 	})
-
-});
-
-
-
-// reponse = requests.post(
-//     url='https://facer-face.cognitiveservices.azure.com/face/v1.0/detect',
-//     headers={
-//         'Ocp-Apim-Subscription-Key': CLE,
-//         'Content-Type': 'application/octet-stream',
-//         'Accept': 'application/json'
-//     },
-//     params={'recognitionModel': 'recognition_02'},
-//     data=open(sys.argv[1], 'rb').read()
-// )
-// visages = reponse.json()
-
-function searcherPython() {
-	let value = "d";
-	const spawn = require("child_process").spawn;
-	const pythonProcess = spawn('python', ["python.py"]);
-	console.log('hum');
-	pythonProcess.stdout.on('data', (data) => {
-		//console.log(data.toString('utf8'));
-		return (data.toString('utf8'));
-	});
-	console.log(value);
 }
 
 app.get('/list-images', (req, res) => {
-	fs.readdir('./uploaded-images', (err, files) => {
+	console.log('/list-images called');
+	fs.readdir('./uploaded-images/', (err, files) => {
 		res.send(files);
 	});
 });
 
-app.get('/files', function(request, response) {
-	console.log(request.query['file']);
-	response.sendFile('./clients-files/' + request.query['file'] + '.html');
-});
+app.get('/files', function (req, res, next) {
+  var options = {
+    root: path.join(__dirname, 'clients-files'),
+    dotfiles: 'deny',
+    headers: {
+      'x-timestamp': Date.now(),
+      'x-sent': true
+    }
+  }
 
-app.listen(3000, () => console.log('Listening on port 3000. Note this is a simple sample uploader and does not have the proper security checks for a production app.'));
+  var fileName = req.query['file'];
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      next(err)
+    } else {
+      console.log('Sent:', fileName)
+    }
+  })
+})
+
+app.listen(3000, () => console.log('Listening on port 3000.'));

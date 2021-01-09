@@ -1,14 +1,14 @@
 {
   "name": "photo-upload-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "TBD",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/username/repository.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "TBD",
+  "license": "TBD",
   "dependencies": {
     "express": "^4.16.2",
     "https": "^1.0.0",
@@ -16,5 +16,9 @@
     "multer": "^1.3.0",
     "python-shell": "^2.0.0",
     "request": "^2.88.2"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
