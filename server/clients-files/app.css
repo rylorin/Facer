@@ -1,0 +1,46 @@
+h2 {
+	color: blue;
+}
+* {
+	 font-family: sans-serif;
+}
+a {
+	border: none;
+    color: white;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    text-decoration: none;
+  /*  display: inline-block; */
+    display: block;
+    font-size: 15px;
+    cursor: pointer;
+    width: 350px;
+}
+.button-top {
+  background-color: blue;
+  border: none;
+  color: white;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+  text-decoration: none;
+/*  display: inline-block; */
+  display: block;
+  font-size: 15px;
+  cursor: pointer;
+  width: 350px;
+}
+.button-middle {
+  background-color: #008000;
+  width: 350px;
+}
+.button-bottom {
+  background-color: red;
+  width: 350px;
+}
+img {
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  width: 350px;
+}
