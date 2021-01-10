@@ -26,6 +26,7 @@ checkout project
     $ cd App
     $ npm install
     $ npx npm-force-resolutions
+    $ npm i --save-dev invariant
     $ npm install
     $ ionic build
     $ npx cap add ios
